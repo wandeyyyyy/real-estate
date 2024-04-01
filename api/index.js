@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-
+const userRouter =require('./routes/user.route')
 
 mongoose.connect('mongodb://127.0.0.1:27017/real-estate')
 .then(() => console.log('Connected to MongoDB......'))
@@ -14,4 +14,5 @@ app.listen(3000, () => {
 }
 );
 
+app.use('/api/user', userRouter)
 
