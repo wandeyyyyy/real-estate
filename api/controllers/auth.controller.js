@@ -1,17 +1,15 @@
 const User = require("../model/user.model");
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const errorHandler = require("../utils/error");
-const dotenv = require("dotenv");
-dotenv.config()
+const jwt = require('jsonwebtoken');
+
 
 const signup = async (req,res, next) => {
     
 try {
 const {username, email, password} = req.body;
-if (!username || !email || !password) {
-    return res.status(400).json( "Please provide username, email, and password" );
-}
+const validUser = await User.findOne({email})
+if (validUser) return next(errorHandler(404, 'User Already Exists'))
 const hashedpassword =  await bcrypt.hash(password, 10);
 const newUser = new User({username, email, password: hashedpassword});
 
@@ -61,7 +59,7 @@ const signin = async (req,res, next) => {
         if (!validPassword) return next(errorHandler(401 , 'Incorrect Credentials'))
         const token = jwt.sign({id: validUser._id}, process.env.JWT_SECRET );
     // dont send the password back to client 
-    const{ password: pass, ...rest} = validUser._doc;
+    const { password: pass, ...rest} = validUser._doc;
 
 
     res.cookie('access_token', token, {httpOnly: true }).status(200).json(rest)
