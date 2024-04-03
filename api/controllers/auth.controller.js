@@ -2,7 +2,8 @@ const User = require("../model/user.model");
 const bcrypt = require('bcrypt');
 const errorHandler = require("../utils/error");
 const jwt = require('jsonwebtoken');
-
+const dotenv = require('dotenv');
+dotenv.congig()
 
 const signup = async (req,res, next) => {
     
@@ -57,7 +58,7 @@ const signin = async (req,res, next) => {
         // check if passord is correct
         const validPassword = bcrypt.compareSync(password, validUser.password);
         if (!validPassword) return next(errorHandler(401 , 'Incorrect Credentials!'))
-        const token = jwt.sign({id: validUser._id}, process.env.JWT_SECRET );
+        const token = jwt.sign({id: validUser._id}, process.env.JWT_SECRETKEY );
     // dont send the password back to client 
     const { password: pass, ...rest} = validUser._doc;
 
