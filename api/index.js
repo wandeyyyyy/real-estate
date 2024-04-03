@@ -1,8 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+dotenv.config();
 const userRouter = require('./routes/user.route')
 const authRouter = require('./routes/auth.route')
-mongoose.connect('mongodb://127.0.0.1:27017/real-estate')
+
+
+mongoose
+.connect('mongodb://127.0.0.1:27017/real-estate')
 .then(() => console.log('Connected to MongoDB......'))
 .catch(err => console.log('Could not connect to MongoDB.....', err))
 

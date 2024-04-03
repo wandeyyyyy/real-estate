@@ -1,27 +1,31 @@
 const User = require("../model/user.model");
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const errorHandler = require("../utils/error");
 const dotenv = require("dotenv");
 dotenv.config()
 
 const signup = async (req,res, next) => {
+    
+try {
 const {username, email, password} = req.body;
-const hashedpassword = bcrypt.hashSync(password, 10);
+if (!username || !email || !password) {
+    return res.status(400).json( "Please provide username, email, and password" );
+}
+const hashedpassword =  await bcrypt.hash(password, 10);
 const newUser = new User({username, email, password: hashedpassword});
 
-try {
-    
+
     await newUser.save();
-    res.status(200).json('User created Successfully');
-    res.status(400).json('User already exists')
+    res.status(201).json('User Created Successfully')
 } catch (error) {
-//   next(errorHandler(500, 'error from the function'))
-next(error)
-}
-
+    next(error)
 
 }
+    // Save the new user
+
+
+};
 
 // or use this for more specific error
 // const signup = async (req,res) => {
@@ -53,7 +57,7 @@ const signin = async (req,res, next) => {
         const validUser = await User.findOne({email})
         if (!validUser) return next(errorHandler(404, 'User not Found'))
         // check if passord is correct
-        const validPassword = bcrypt.hashSync(password, validUser.password);
+        const validPassword = bcrypt.compareSync(password, validUser.password);
         if (!validPassword) return next(errorHandler(401 , 'Incorrect Credentials'))
         const token = jwt.sign({id: validUser._id}, process.env.JWT_SECRET );
     // dont send the password back to client 
