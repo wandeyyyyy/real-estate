@@ -54,7 +54,7 @@ const signin = async (req,res, next) => {
     try {
         //check if email exists 
         const validUser = await User.findOne({email})
-        if (!validUser) return next(errorHandler(404, 'User not Found'))
+        if (!validUser) return next(errorHandler(404, 'User not Found!'))
         // check if passord is correct
         const validPassword = bcrypt.compareSync(password, validUser.password);
         if (!validPassword) return next(errorHandler(401 , 'Incorrect Credentials!'))
