@@ -58,7 +58,7 @@ const signin = async (req,res, next) => {
         // check if passord is correct
         const validPassword = bcrypt.compareSync(password, validUser.password);
         if (!validPassword) return next(errorHandler(401 , 'Incorrect Credentials!'))
-        const token = jwt.sign({id: validUser._id}, process.env.JWT_SECRETKEY );
+        const token = jwt.sign({id: validUser._id}, process.env.JWT_SECRET );
     // dont send the password back to client 
     const { password: pass, ...rest} = validUser._doc;
 
@@ -85,7 +85,7 @@ try {
     if(user){
         // create token and save inside cookie
 
-        const token = jwt.sign({id: user._id},process.env.JWT_SECRETKEY )
+        const token = jwt.sign({id: user._id},process.env.JWT_SECRET )
         const { password: pass, ...rest} = user._doc;
 
 
@@ -102,7 +102,7 @@ try {
             avatar: req.body.photo});
     await newUser.save();
 
-    const token = jwt.sign({id: user._id},process.env.JWT_SECRETKEY )
+    const token = jwt.sign({id: user._id},process.env.JWT_SECRET )
     const { password: pass, ...rest} = validUser._doc;
 
 
