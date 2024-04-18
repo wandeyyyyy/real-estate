@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const userRouter = require('./routes/user.route')
 const authRouter = require('./routes/auth.route')
+const listingRouter = require('./routes/list.route')
 
 
 mongoose
@@ -24,6 +25,7 @@ app.listen(3000, () => {
 
 app.use('/api/user', userRouter); 
 app.use('/api/auth', authRouter);  
+app.use('/api/listing', listingRouter);  
 
 
 
