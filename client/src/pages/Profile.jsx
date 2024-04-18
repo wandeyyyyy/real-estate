@@ -4,7 +4,7 @@ import { useRef, useState ,useEffect} from 'react'
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage'
 
 import { app } from '../firebase'
-import { updateUserFailure, updateUserStart,updateUserSuccess , deleteUserStart,deleteUserSuccess,deleteUserFailure} from '../redux/user/userSlice';
+import { updateUserFailure, updateUserStart,updateUserSuccess , deleteUserStart,deleteUserSuccess,deleteUserFailure, signOutUserStart, signOutUserFailure, signOutUserSuccess} from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 
 
@@ -82,7 +82,7 @@ if(data.success === false){
 }
 }
 
-const handleDelteUser = async(e) => {
+const handleDeleteUser = async(e) => {
   try {
     dispatch(deleteUserStart());
     const res = await fetch(`/api/user/delete/${currentUser._id}`,
@@ -97,6 +97,22 @@ const handleDelteUser = async(e) => {
     dispatch(deleteUserSuccess(data))
   } catch (error) {
     dispatch(deleteUserFailure(error.message))
+  }
+  
+  
+}
+const handleSignOut = async () => {
+  try {
+    dispatch(signOutUserStart());
+    const res = await fetch('/api/auth/signout');
+    const data = await res.json();
+    if(data.success === false){
+      dispatch(signOutUserFailure(data.message));
+      return;
+    }
+    dispatch(signOutUserSuccess(data));
+  } catch (error) {
+    dispatch(signOutUserFailure(data.message));
   }
 }
 
@@ -129,10 +145,10 @@ onChange={handleChange} />
 </button>
    </form>
    <div className='flex justify-between mt-5'>
-    <span className='text-red-700 cursor-pointer font-semibold' onClick={handleDelteUser}>
+    <span className='text-red-700 cursor-pointer font-semibold' onClick={handleDeleteUser}>
       Delete Account
     </span>
-    <span className='text-red-700 cursor-pointer font-semibold'>
+    <span onClick={handleSignOut} className='text-red-700 cursor-pointer font-semibold'>
       Sign Out
     </span>
    </div>

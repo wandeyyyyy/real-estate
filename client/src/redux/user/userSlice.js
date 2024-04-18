@@ -46,6 +46,18 @@ state.error = null;
             deleteUserFailure: (state,action) => {
                 state.loading = false;
                 state.error = action.payload;  
+            },
+           signOutUserStart: (state) => {
+                state.loading = true
+            },
+           signOutUserSuccess: (state,action) => {
+                state.currentUser = null;
+                state.loading = false;
+                state.error = null;
+            },
+           signOutUserFailure: (state,action) => {
+                state.loading = false;
+                state.error = action.payload;  
             }
         }
     
@@ -57,6 +69,9 @@ export const {signInStart,
      updateUserStart,
       updateUserSuccess,
        updateUserFailure,
+       signOutUserStart,
+       signOutUserSuccess,
+       signOutUserFailure,
        deleteUserStart,
        deleteUserSuccess,
        deleteUserFailure
