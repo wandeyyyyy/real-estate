@@ -16,6 +16,9 @@ const Profile = () => {
 const [filePerc, setfilePerc] = useState(0);
 const [fileUploadError, setFileUploadError] = useState(false);
 const [formData,setFormData ] = useState({});
+const [showListError,setShowListError] = useState(false);
+const [userListing,setUserListing] = useState([]);
+
 const [updateSuccess,setUpdateSuccess ] = useState(false);
 const dispatch = useDispatch();
 
@@ -117,6 +120,23 @@ const handleSignOut = async () => {
   }
 }
 
+
+const handleShowList = async () => {
+  try {
+    setShowListError(false);
+    const res = await fetch(`/api/user/listings/${currentUser._id}`)
+    const data = await res.json();
+
+    if(data.success === false){
+   setShowListError(true);
+      return;
+    }
+    setUserListing(data)
+  } catch (error) {
+    setShowListError(true)
+  }
+}
+
   return (
     <div className='p-3 max-w-lg m-auto'>
    <h1 className='text-3xl font-bold text-center my-7'>Profile</h1>
@@ -160,6 +180,30 @@ CREATE LISTING
    <p className='text-green-700 font-semibold mt-2'>
     {updateSuccess ? "User updated Successfully!" : ""}
    </p>
+   <button onClick={handleShowList} className='text-green-700 w-full font-medium'>Show Listings</button>
+   <p className='text-red-700 font-medium'>{showListError ? 'Error' : ''}</p>
+
+{userListing && userListing.length > 0 && 
+
+<div className='flex flex-col gap-4'>
+  <h1  className='text-center my-7 text-2xl font-bold '>Your List</h1>
+  
+  {userListing.map((listing) => (
+<div className='border rounded-lg p-3 flex justify-between items-center gap-4' key={listing._id}>
+  <Link to={`/listings/${listing._id}`}>
+  <img src={listing.images} alt="list cover" className='h-20 w-20 object-contain' />
+  </Link>
+  <Link  to={`/listings/${listing._id}`}>
+
+    <p className='text-slate-700 font-bold flex-1 hover:underline  truncate'>{listing.name}</p>
+  </Link>
+  <div className='flex flex-col items-center font-medium'>
+    <button className='text-red-700'>Delete</button>
+    <button className='text-green-700'>Edit</button>
+  </div>
+</div>
+  ))}
+</div>}
    </div>
   )
 }
