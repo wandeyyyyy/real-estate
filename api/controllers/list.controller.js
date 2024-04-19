@@ -50,6 +50,18 @@ try {
 }
 
 }
-
-module.exports = {createList, deleteList, updateList}
+const getList = async (req,res,next) => {
+    const listing = await Listing.findById(req.params.id)
+    
+try {
+    if (!listing){
+        return next(errorHandler(404, "List not found"))
+    }
+    res.status(200).json(listing)
+  
+} catch (error) {
+    next(error)
+}
+}
+module.exports = {createList, deleteList, updateList, getList}
 
