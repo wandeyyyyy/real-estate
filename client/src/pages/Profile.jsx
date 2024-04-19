@@ -137,6 +137,25 @@ const handleShowList = async () => {
   }
 }
 
+const deleteList = async (listId) => {
+  try {
+    const res = await fetch(`/api/listing/delete/${listId}`,{
+      method: "DELETE"
+    })
+    const data = await res.json();
+
+    if(data.success === false){
+console.log(data.message)
+      return;
+    }
+
+    setUserListing((prev) =>
+     prev.filter((listing) => listing._id !== listId))
+  } catch (error) {
+    
+  }
+}
+
   return (
     <div className='p-3 max-w-lg m-auto'>
    <h1 className='text-3xl font-bold text-center my-7'>Profile</h1>
@@ -198,7 +217,7 @@ CREATE LISTING
     <p className='text-slate-700 font-bold flex-1 hover:underline  truncate'>{listing.name}</p>
   </Link>
   <div className='flex flex-col items-center font-medium'>
-    <button className='text-red-700'>Delete</button>
+    <button onClick={() =>deleteList(listing._id)} className='text-red-700'>Delete</button>
     <button className='text-green-700'>Edit</button>
   </div>
 </div>

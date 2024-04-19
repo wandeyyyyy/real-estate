@@ -1,5 +1,6 @@
 
-const Listing = require('../model/list.model')
+const Listing = require('../model/list.model');
+const errorHandler = require('../utils/error');
 
 
 
@@ -15,5 +16,22 @@ try {
 
 }
 
-module.exports = createList
+const deleteList = async (req,res,next) => {
+const listing = await Listing.findById(req.params.id)
+if (!listing){
+    return next(errorHandler(404, "List not found"))
+}
+if (req.user.id !== listing.userRef){
+    return next(errorHandler(401, "You can only delete Your List"))
+}
+try {
+    await Listing.findByIdAndDelete(req.params.id)
+    res.status(200).json("Deleted Successfully")
+} catch (error) {
+    next(error)
+}
+}
+
+
+module.exports = {createList, deleteList}
 
