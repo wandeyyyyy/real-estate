@@ -31,7 +31,25 @@ try {
     next(error)
 }
 }
+const updateList = async (req,res,next) => {
+    const listing = await Listing.findById(req.params.id)
+    if (!listing){
+        return next(errorHandler(404, "List not found"))
+    }
+    if (req.user.id !== listing.userRef){
+        return next(errorHandler(401, "You can only update Your List"))
 
 
-module.exports = {createList, deleteList}
+    }
+try {
+    const updateListing = await Listing.findByIdAndUpdate(req.params.id, req.body,{new: true});
+
+   res.status(200).json(updateListing)
+} catch (error) {
+    next(error)
+}
+
+}
+
+module.exports = {createList, deleteList, updateList}
 
