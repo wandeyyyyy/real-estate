@@ -42,10 +42,10 @@ if(data.success === false){
 console.log(data.message);
 return;
 }
-
+setFormData(data)
 
     }
-    fetchList()
+    fetchList();
 })
 
 const handleFileSubmit = (e) => {

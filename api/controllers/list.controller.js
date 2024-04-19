@@ -7,7 +7,7 @@ const errorHandler = require('../utils/error');
 const createList = async (req,res,next) => {
 try {
     const listing = await Listing.create(req.body);
-    return res.status(201).json(listing);
+    return res.status(200).json(listing);
 
 } catch (error) {
     next(error)
@@ -51,9 +51,10 @@ try {
 
 }
 const getList = async (req,res,next) => {
+   
+try {
     const listing = await Listing.findById(req.params.id)
     
-try {
     if (!listing){
         return next(errorHandler(404, "List not found"))
     }

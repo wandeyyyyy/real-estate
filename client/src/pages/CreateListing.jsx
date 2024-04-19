@@ -28,8 +28,7 @@ const [formData, setFormData] = useState({
    furnished: false
 })
 const [imageUploadError, setImageUploadError] = useState(false)
-console.log(formData)
-console.log(files)
+
 
 const handleFileSubmit = (e) => {
 
