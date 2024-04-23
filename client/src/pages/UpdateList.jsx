@@ -54,7 +54,7 @@ const UpdateList = () => {
   const handleImageSubmit = (e) => {
     e.preventDefault();
     if(files.length > 0 && files.length  + formData.images.length < 7){
-        setLoading(true);
+
         setUploading(true)
         setImageUploadError(false)
     const promises = []
@@ -66,17 +66,17 @@ const UpdateList = () => {
         setFormData({...formData, images: formData.images.concat(urls),
         })
         setImageUploadError(false);
-        setLoading(false);
+      
         setUploading(false);
     
     }).catch((err) => {
         setImageUploadError('Image Upload Failed(2mb max)')
-        setLoading(false);
+        
         setUploading(false);
     })
     }else{
         setImageUploadError('You can only Upload 6 images')
-        setLoading(false);
+        setUploading(false);
     }
   };
 
@@ -113,7 +113,7 @@ const UpdateList = () => {
   };
 
   const handleChange = (e) => {
-    if (e.target.id === 'sale' || e.target.id === 'rent') {
+    if (e.target.id === 'sell' || e.target.id === 'rent') {
       setFormData({
         ...formData,
         type: e.target.id,
@@ -213,10 +213,10 @@ const UpdateList = () => {
             <div className='flex gap-2'>
               <input
                 type='checkbox'
-                id='sale'
+                id='sell'
                 className='w-5'
                 onChange={handleChange}
-                checked={formData.type === 'sale'}
+                checked={formData.type === 'sell'}
               />
               <span>Sell</span>
             </div>
@@ -362,14 +362,14 @@ const UpdateList = () => {
   formData.images.length > 0 && formData.images.map((url, index) => (
     <div key={index} className='flex justify-between p-3 border items-center'>
       <img src={url} alt="list image" className='w-20 h-20 object-contain rounded-lg' />
-      <button disabled={loading}
+      <button 
         onClick={() => handleDelImage(index)} className='p-3 text-red-700 rounded-lg hover:opacity-95'>DELETE</button>
     </div>
   ))
 }
 
           <button
-            disabled={ loading}
+            disabled={ loading || uploading}
             className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
           >
             {loading ? 'Updating...' : 'Update listing'}
