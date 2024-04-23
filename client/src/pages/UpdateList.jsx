@@ -11,6 +11,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 
 
+
 const UpdateList = () => {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -51,30 +52,31 @@ const UpdateList = () => {
   }, []);
 
   const handleImageSubmit = (e) => {
-    if (files.length > 0 && files.length + formData.images.length < 7) {
-      setUploading(true);
-      setImageUploadError(false);
-      const promises = [];
-
-      for (let i = 0; i < files.length; i++) {
-        promises.push(storeImage(files[i]));
-      }
-      Promise.all(promises)
-        .then((urls) => {
-          setFormData({
-            ...formData,
-            imageUrls: formData.images.concat(urls),
-          });
-          setImageUploadError(false);
-          setUploading(false);
+    e.preventDefault();
+    if(files.length > 0 && files.length  + formData.images.length < 7){
+        setLoading(true);
+        setUploading(true)
+        setImageUploadError(false)
+    const promises = []
+    for (let i = 0; i < files.length; i++) {
+       promises.push(storeImage(files[i]))
+        
+    }
+    Promise.all(promises).then((urls) => {
+        setFormData({...formData, images: formData.images.concat(urls),
         })
-        .catch((err) => {
-          setImageUploadError('Image upload failed (2 mb max per image)');
-          setUploading(false);
-        });
-    } else {
-      setImageUploadError('You can only upload 6 images per listing');
-      setUploading(false);
+        setImageUploadError(false);
+        setLoading(false);
+        setUploading(false);
+    
+    }).catch((err) => {
+        setImageUploadError('Image Upload Failed(2mb max)')
+        setLoading(false);
+        setUploading(false);
+    })
+    }else{
+        setImageUploadError('You can only Upload 6 images')
+        setLoading(false);
     }
   };
 
@@ -103,7 +105,7 @@ const UpdateList = () => {
     });
   };
 
-  const handleRemoveImage = (index) => {
+  const handleDelImage = (index) => {
     setFormData({
       ...formData,
       images: formData.images.filter((_, i) => i !== index),
@@ -184,7 +186,7 @@ const UpdateList = () => {
             className='border p-3 rounded-lg'
             id='name'
             maxLength='62'
-            minLength='10'
+            minLength='5'
             required
             onChange={handleChange}
             value={formData.name}
@@ -346,7 +348,7 @@ const UpdateList = () => {
               type='button'
               disabled={uploading}
               onClick={handleImageSubmit}
-              className='p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80'
+              className='p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80 hover:bg-green-700 hover:text-white'
             >
               {uploading ? 'Uploading...' : 'Upload'}
             </button>
@@ -354,28 +356,20 @@ const UpdateList = () => {
           <p className='text-red-700 text-sm'>
             {imageUploadError && imageUploadError}
           </p>
-          {formData.images.length > 0 &&
-            formData.images.map((url, index) => (
-              <div
-                key={url}
-                className='flex justify-between p-3 border items-center'
-              >
-                <img
-                  src={url}
-                  alt='listing image'
-                  className='w-20 h-20 object-contain rounded-lg'
-                />
-                <button
-                  type='button'
-                  onClick={() => handleRemoveImage(index)}
-                  className='p-3 text-red-700 rounded-lg uppercase hover:opacity-75'
-                >
-                  Delete
-                </button>
-              </div>
-            ))}
+
+
+         {
+  formData.images.length > 0 && formData.images.map((url, index) => (
+    <div key={index} className='flex justify-between p-3 border items-center'>
+      <img src={url} alt="list image" className='w-20 h-20 object-contain rounded-lg' />
+      <button disabled={loading}
+        onClick={() => handleDelImage(index)} className='p-3 text-red-700 rounded-lg hover:opacity-95'>DELETE</button>
+    </div>
+  ))
+}
+
           <button
-            disabled={loading || uploading}
+            disabled={ loading}
             className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
           >
             {loading ? 'Updating...' : 'Update listing'}
