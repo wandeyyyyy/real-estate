@@ -209,10 +209,10 @@ CREATE LISTING
   
   {userListing.map((listing) => (
 <div className='border rounded-lg p-3 flex justify-between items-center gap-4' key={listing._id}>
-  <Link to={`/listings/${listing._id}`}>
+  <Link to={`/listing/${listing._id}`}>
   <img src={listing.images} alt="list cover" className='h-20 w-20 object-contain' />
   </Link>
-  <Link  to={`/listings/${listing._id}`}>
+  <Link  to={`/listing/${listing._id}`}>
 
     <p className='text-slate-700 font-bold flex-1 hover:underline  truncate'>{listing.name}</p>
   </Link>
