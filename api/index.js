@@ -6,6 +6,7 @@ dotenv.config();
 const userRouter = require('./routes/user.route')
 const authRouter = require('./routes/auth.route')
 const listingRouter = require('./routes/list.route')
+const path = require('path')
 
 
 mongoose
@@ -13,6 +14,8 @@ mongoose
 .then(() => console.log('Connected to MongoDB......'))
 .catch(err => console.log('Could not connect to MongoDB.....', err))
 
+
+const __dirname = path.resolve()
 
 const app = express();
 app.use(cookieParser())
@@ -27,7 +30,10 @@ app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);  
 app.use('/api/listing', listingRouter);  
 
-
+app.use(express.static(path.join(__dirname, '/client/dist')))
+app.get('*', (req,res) => {
+res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'))
+})
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
