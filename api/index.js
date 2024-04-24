@@ -9,10 +9,9 @@ const listingRouter = require('./routes/list.route')
 const path = require('path')
 
 
-mongoose
-.connect('mongodb://127.0.0.1:27017/real-estate')
-.then(() => console.log('Connected to MongoDB......'))
-.catch(err => console.log('Could not connect to MongoDB.....', err))
+mongoose.connect('mongodb://127.0.0.1/real-estate')
+.then(() => console.log('Connected to MongoDB...'))
+.catch(err => console.log('Cannot Connect to MongoDB...', err))
 
 
 const __directoryname = path.resolve();
