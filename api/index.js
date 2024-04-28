@@ -1,18 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser')
-
+const dotenv = require('dotenv');
+dotenv.config();
 const userRouter = require('./routes/user.route')
 const authRouter = require('./routes/auth.route')
 const listingRouter = require('./routes/list.route')
 const path = require('path')
-const config = require('../config')
-const mongoConnectionString = config.mongoConnectionString
 
 
 
-
-mongoose.connect(mongoConnectionString)
+mongoose.connect(process.env.MONGO)
   .then(() => {
     console.log("Connected to MongoDB");
     // Your code after successful connection
