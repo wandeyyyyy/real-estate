@@ -116,7 +116,7 @@ const handleSubmitForm = async (e) => {
     try {
 
         if(formData.images.length < 1) return setError("Upload atleast 1 image")
-        if(formData.regularPrice < formData.discountPrice) return setError("Discount Price must be lower than regular price")
+        if(+formData.regularPrice < +formData.discountPrice) return setError("Discount Price must be lower than regular price")
         setLoads(true)
         setError(false);
 
